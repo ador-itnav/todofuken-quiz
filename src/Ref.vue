@@ -36,6 +36,12 @@ reactive.value; // <-8
   <div class="label">count: {{ count }}</div>
 
   <button @click="countUp(10)">Count up</button>
+
+  <main class="main">
+    <div class="box">box1</div>
+    <div class="box">box2</div>
+    <div class="box">box3</div>
+  </main>
 </template>
 
 <style scoped>
