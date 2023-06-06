@@ -13,3 +13,10 @@
 body {
   margin: 0;
 }
+td {
+  padding-left: 10px;
+  text-align: center;
+}
+tr {
+  padding-bottom: 10px;
+}
