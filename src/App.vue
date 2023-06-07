@@ -58,9 +58,9 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
 </script>
 
 <template>
-  <v-header>
+  <header elevation="6">
     <h1 class="title">都道府県クイズ</h1>
-  </v-header>
+  </header>
   <h2 class="">都道府県一覧</h2>
   <img
     class="map"
@@ -167,6 +167,7 @@ h2 {
   padding: 30px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 30px;
 }
 .map {
   align-items: center;
@@ -175,7 +176,7 @@ h2 {
   float: left;
   margin: auto;
   margin-left: 50px;
-  border: 1px solid black;
+  border: 1px solid white;
   position: sticky;
 }
 .footer {
