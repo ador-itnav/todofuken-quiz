@@ -58,17 +58,24 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
 </script>
 
 <template>
-  <header>
+  <v-header>
     <h1 class="title">都道府県クイズ</h1>
-  </header>
+  </v-header>
+  <h2 class="">都道府県一覧</h2>
+  <img
+    class="map"
+    src="https://upload.wikimedia.org/wikipedia/commons/5/57/Japan_prefectures-ja.png"
+  />
+
   <main class="main">
     <div>
-      <h2>都道府県一覧</h2>
+      <!-- <h2>都道府県一覧</h2>
       <img
         class="map"
         src="https://upload.wikimedia.org/wikipedia/commons/5/57/Japan_prefectures-ja.png"
-      />
-      <table class="table">
+      /> -->
+
+      <v-table class="table">
         <thead>
           <tr>
             <th>番号</th>
@@ -85,13 +92,13 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
           >
             <td>{{ prefecture.number }}</td>
             <td>
-              <input
+              <v-text-field
                 v-model="answers[index].prefecture"
                 :disabled="answers[index].checked1 !== null"
               />
             </td>
             <td>
-              <input
+              <v-text-field
                 v-model="answers[index].city"
                 :disabled="answers[index].checked2 !== null"
               />
@@ -102,9 +109,9 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
                   answers[index].checked1 ? '○' : '×'
                 }}</span>
                 <span v-else>
-                  <button @click="() => resetAnswer(index, 'checked1')">
+                  <v-btn @click="() => resetAnswer(index, 'checked1')">
                     ×
-                  </button>
+                  </v-btn>
                 </span>
               </template>
             </td>
@@ -114,22 +121,26 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
                   answers[index].checked2 ? '○' : '×'
                 }}</span>
                 <span v-else>
-                  <button @click="() => resetAnswer(index, 'checked2')">
+                  <v-btn @click="() => resetAnswer(index, 'checked2')">
                     ×
-                  </button>
+                  </v-btn>
                 </span>
               </template>
             </td>
           </tr>
         </tbody>
-      </table>
+      </v-table>
     </div>
   </main>
+
   <p></p>
+
   <footer class="footer">
-    <button @click="checkAnswers">正誤判定</button>
+    <v-btn @click="checkAnswers">正誤判定</v-btn>
     <p>正解数: {{ getCorrectCount }} / {{ PREFECTURES.length * 2 }}</p>
   </footer>
+  <space></space>
+  <space> </space>
 </template>
 
 <style scoped>
@@ -138,13 +149,19 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
   text-align: center;
 }
 
+h2 {
+  padding-left: 250px;
+}
+
 .main {
   display: flex;
   flex-direction: column;
+  height: auto;
   /* align-items: center; */
 }
 
 .table {
+  max-width: 700px;
   border-radius: 30px;
   border: solid 1px;
   padding: 30px;
@@ -153,11 +170,13 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
 }
 .map {
   align-items: center;
-  max-width: 700px;
-  max-height: 700px;
+  max-width: 600px;
+  max-height: 600px;
   float: left;
   margin: auto;
+  margin-left: 50px;
   border: 1px solid black;
+  position: sticky;
 }
 .footer {
   display: flex;
