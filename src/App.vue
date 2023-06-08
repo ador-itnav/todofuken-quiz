@@ -58,7 +58,8 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" id="app">
+    <router-view />
     <header>
       <h1 class="title">都道府県クイズ</h1>
     </header>
