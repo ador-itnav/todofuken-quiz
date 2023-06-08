@@ -58,95 +58,106 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
 </script>
 
 <template>
-  <header elevation="6">
-    <h1 class="title">都道府県クイズ</h1>
-  </header>
-  <h2 class="">都道府県一覧</h2>
-  <img
-    class="map"
-    src="https://upload.wikimedia.org/wikipedia/commons/5/57/Japan_prefectures-ja.png"
-  />
+  <div class="app">
+    <header>
+      <h1 class="title">都道府県クイズ</h1>
+    </header>
+    <h2 class="">都道府県一覧</h2>
+    <img
+      class="map"
+      src="https://upload.wikimedia.org/wikipedia/commons/5/57/Japan_prefectures-ja.png"
+    />
 
-  <main class="main">
-    <div>
-      <!-- <h2>都道府県一覧</h2>
-      <img
-        class="map"
-        src="https://upload.wikimedia.org/wikipedia/commons/5/57/Japan_prefectures-ja.png"
-      /> -->
+    <main class="main">
+      <div>
+        <v-table density="compact" height="900px" class="table">
+          <thead>
+            <tr>
+              <th class="table-header">番号</th>
+              <th class="table-header">都道府県名</th>
+              <th class="table-header">県庁所在地</th>
+              <th class="table-header">正誤欄1</th>
+              <th class="table-header">正誤欄2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(prefecture, index) in PREFECTURES"
+              :key="prefecture.number"
+            >
+              <td>{{ prefecture.number }}</td>
+              <td>
+                <v-text-field
+                  variant="underlined"
+                  density="compact"
+                  v-model="answers[index].prefecture"
+                  :disabled="answers[index].checked1 !== null"
+                />
+              </td>
+              <td>
+                <v-text-field
+                  variant="underlined"
+                  density="compact"
+                  v-model="answers[index].city"
+                  :disabled="answers[index].checked2 !== null"
+                />
+              </td>
+              <td>
+                <template v-if="answers[index].checked1 !== null">
+                  <span v-if="answers[index].checked1">{{
+                    answers[index].checked1 ? '○' : '×'
+                  }}</span>
+                  <span v-else>
+                    <v-btn
+                      density="compact"
+                      @click="() => resetAnswer(index, 'checked1')"
+                    >
+                      ×
+                    </v-btn>
+                  </span>
+                </template>
+              </td>
+              <td>
+                <template v-if="answers[index].checked2 !== null">
+                  <span v-if="answers[index].checked2">{{
+                    answers[index].checked2 ? '○' : '×'
+                  }}</span>
+                  <span v-else>
+                    <v-btn
+                      density="compact"
+                      @click="() => resetAnswer(index, 'checked2')"
+                    >
+                      ×
+                    </v-btn>
+                  </span>
+                </template>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
+    </main>
 
-      <v-table class="table">
-        <thead>
-          <tr>
-            <th>番号</th>
-            <th>都道府県名</th>
-            <th>県庁所在地</th>
-            <th>正誤欄1</th>
-            <th>正誤欄2</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(prefecture, index) in PREFECTURES"
-            :key="prefecture.number"
-          >
-            <td>{{ prefecture.number }}</td>
-            <td>
-              <v-text-field
-                v-model="answers[index].prefecture"
-                :disabled="answers[index].checked1 !== null"
-              />
-            </td>
-            <td>
-              <v-text-field
-                v-model="answers[index].city"
-                :disabled="answers[index].checked2 !== null"
-              />
-            </td>
-            <td>
-              <template v-if="answers[index].checked1 !== null">
-                <span v-if="answers[index].checked1">{{
-                  answers[index].checked1 ? '○' : '×'
-                }}</span>
-                <span v-else>
-                  <v-btn @click="() => resetAnswer(index, 'checked1')">
-                    ×
-                  </v-btn>
-                </span>
-              </template>
-            </td>
-            <td>
-              <template v-if="answers[index].checked2 !== null">
-                <span v-if="answers[index].checked2">{{
-                  answers[index].checked2 ? '○' : '×'
-                }}</span>
-                <span v-else>
-                  <v-btn @click="() => resetAnswer(index, 'checked2')">
-                    ×
-                  </v-btn>
-                </span>
-              </template>
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
-    </div>
-  </main>
-
-  <p></p>
-
-  <footer class="footer">
-    <v-btn @click="checkAnswers">正誤判定</v-btn>
-    <p>正解数: {{ getCorrectCount }} / {{ PREFECTURES.length * 2 }}</p>
-  </footer>
-  <space></space>
-  <space> </space>
+    <footer class="footer">
+      <v-btn density="compact" @click="checkAnswers">正誤判定</v-btn>
+      <p>正解数: {{ getCorrectCount }} / {{ PREFECTURES.length * 2 }}</p>
+    </footer>
+    <space></space>
+    <space> </space>
+  </div>
 </template>
 
 <style scoped>
+@import './style.css';
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Mai&display=swap');
+.app {
+  font-family: 'Yuji Mai', serif;
+}
 .title {
+  font-size: 70px;
   margin-bottom: 8px;
   text-align: center;
+  filter: drop-shadow(10px 10px 8px black);
 }
 
 h2 {
@@ -169,6 +180,9 @@ h2 {
   margin-right: auto;
   line-height: 30px;
 }
+.table-header {
+  text-align: center;
+}
 .map {
   align-items: center;
   max-width: 600px;
@@ -178,10 +192,35 @@ h2 {
   margin-left: 50px;
   border: 1px solid white;
   position: sticky;
+  top: 60%;
+  transform: translateY(-50%);
 }
 .footer {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (max-width: 740px) {
+  h2 {
+    padding-left: 0;
+  }
+
+  .main {
+    align-items: flex-start;
+  }
+
+  .table {
+    max-width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .footer {
+    padding-left: 0;
+  }
 }
 </style>
