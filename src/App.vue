@@ -5,16 +5,16 @@ import { PREFECTURES } from './prefectures';
 interface Answer {
   prefecture: string;
   city: string;
-  checked1: boolean | null;
-  checked2: boolean | null;
+  isCorrectPrefecture: boolean | null;
+  isCorrectCity: boolean | null;
 }
 
 const answers = ref<Answer[]>(
   PREFECTURES.map(() => ({
     prefecture: '',
     city: '',
-    checked1: null,
-    checked2: null,
+    isCorrectPrefecture: null,
+    isCorrectCity: null,
   }))
 );
 
@@ -22,19 +22,22 @@ const checkAnswers = () => {
   for (let i = 0; i < answers.value.length; i++) {
     const answer = answers.value[i];
     const prefecture = PREFECTURES[i];
-    answer.checked1 = answer.prefecture === prefecture.name;
-    answer.checked2 = answer.city === prefecture.city;
+    answer.isCorrectPrefecture = answer.prefecture === prefecture.name;
+    answer.isCorrectCity = answer.city === prefecture.city;
   }
 };
 
-const resetAnswer = (index: number, field: 'checked1' | 'checked2') => {
+const resetAnswer = (
+  index: number,
+  field: 'isCorrectPrefecture' | 'isCorrectCity'
+) => {
   answers.value[index][field] = null;
 };
 
 const resetAnswers = () => {
   for (let i = 0; i < answers.value.length; i++) {
-    resetAnswer(i, 'checked1');
-    resetAnswer(i, 'checked2');
+    resetAnswer(i, 'isCorrectPrefecture');
+    resetAnswer(i, 'isCorrectCity');
   }
 };
 
@@ -42,17 +45,20 @@ const getCorrectCount = computed(() => {
   let prefectureCorrectCount = 0;
   let cityCorrectCount = 0;
   for (const answer of answers.value) {
-    if (answer.checked1 === true) {
+    if (answer.isCorrectPrefecture === true) {
       prefectureCorrectCount++;
     }
-    if (answer.checked2 === true) {
+    if (answer.isCorrectCity === true) {
       cityCorrectCount++;
     }
   }
   return prefectureCorrectCount + cityCorrectCount;
 });
 
-const enableInput = (index: number, field: 'checked1' | 'checked2') => {
+const enableInput = (
+  index: number,
+  field: 'isCorrectPrefecture' | 'isCorrectCity'
+) => {
   answers.value[index][field] = null;
 };
 </script>
@@ -92,7 +98,7 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
                   variant="underlined"
                   density="compact"
                   v-model="answers[index].prefecture"
-                  :disabled="answers[index].checked1 !== null"
+                  :disabled="answers[index].isCorrectPrefecture !== null"
                 />
               </td>
               <td>
@@ -100,18 +106,18 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
                   variant="underlined"
                   density="compact"
                   v-model="answers[index].city"
-                  :disabled="answers[index].checked2 !== null"
+                  :disabled="answers[index].isCorrectCity !== null"
                 />
               </td>
               <td>
-                <template v-if="answers[index].checked1 !== null">
-                  <span v-if="answers[index].checked1">{{
-                    answers[index].checked1 ? '○' : '×'
+                <template v-if="answers[index].isCorrectPrefecture !== null">
+                  <span v-if="answers[index].isCorrectPrefecture">{{
+                    answers[index].isCorrectPrefecture ? '○' : '×'
                   }}</span>
                   <span v-else>
                     <v-btn
                       density="compact"
-                      @click="() => resetAnswer(index, 'checked1')"
+                      @click="() => resetAnswer(index, 'isCorrectPrefecture')"
                     >
                       ×
                     </v-btn>
@@ -119,14 +125,14 @@ const enableInput = (index: number, field: 'checked1' | 'checked2') => {
                 </template>
               </td>
               <td>
-                <template v-if="answers[index].checked2 !== null">
-                  <span v-if="answers[index].checked2">{{
-                    answers[index].checked2 ? '○' : '×'
+                <template v-if="answers[index].isCorrectCity !== null">
+                  <span v-if="answers[index].isCorrectCity">{{
+                    answers[index].isCorrectCity ? '○' : '×'
                   }}</span>
                   <span v-else>
                     <v-btn
                       density="compact"
-                      @click="() => resetAnswer(index, 'checked2')"
+                      @click="() => resetAnswer(index, 'isCorrectCity')"
                     >
                       ×
                     </v-btn>
