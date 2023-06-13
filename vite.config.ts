@@ -5,4 +5,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/todofuken-quiz/' : './',
   plugins: [vue()],
+  build: {
+    outDir: 'docs',
+  },
 });
