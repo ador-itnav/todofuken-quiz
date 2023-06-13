@@ -24,6 +24,7 @@ const checkAnswers = () => {
     const prefecture = PREFECTURES[i];
     answer.isCorrectPrefecture = answer.prefecture === prefecture.name;
     answer.isCorrectCity = answer.city === prefecture.city;
+    showAnswersButton.value = true;
   }
 };
 
@@ -60,6 +61,20 @@ const enableInput = (
   field: 'isCorrectPrefecture' | 'isCorrectCity'
 ) => {
   answers.value[index][field] = null;
+};
+
+const showAnswersButton = ref(false);
+const showAnswers = ref(false);
+
+const toggleAnswersModal = () => {
+  const confirmation = confirm(
+    '解答を確認すると以後回答は変更できなくなります。解答一覧を表示しますか？'
+  );
+
+  if (confirmation) {
+    showAnswersButton.value = true;
+    showAnswers.value = true;
+  }
 };
 </script>
 
@@ -148,9 +163,42 @@ const enableInput = (
     <footer class="footer">
       <v-btn density="compact" @click="checkAnswers">正誤判定</v-btn>
       <p>正解数: {{ getCorrectCount }} / {{ PREFECTURES.length * 2 }}</p>
+      <v-btn
+        v-if="showAnswersButton"
+        density="compact"
+        @click="toggleAnswersModal"
+      >
+        解答一覧
+      </v-btn>
     </footer>
-    <space></space>
-    <space> </space>
+
+    <div v-if="showAnswersButton" class="answers-modal">
+      <h3>解答一覧</h3>
+      <v-dialog v-model="showAnswers" max-width="600px">
+        <template v-slot:activator>
+          <v-btn density="compact" @click="toggleAnswersModal">
+            解答一覧
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div
+              v-for="(prefecture, index) in PREFECTURES"
+              :key="prefecture.number"
+            >
+              <p>都道府県: {{ prefecture.name }}</p>
+              <p>県庁所在地: {{ prefecture.city }}</p>
+              <p v-if="answers[index].isCorrectPrefecture !== null">
+                正誤: {{ answers[index].isCorrectPrefecture ? '○' : '×' }}
+              </p>
+              <p v-if="answers[index].isCorrectCity !== null">
+                正誤: {{ answers[index].isCorrectCity ? '○' : '×' }}
+              </p>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -229,5 +277,14 @@ h2 {
   .footer {
     padding-left: 0;
   }
+}
+.answers-modal {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: fixed;
+  z-index: 9999;
 }
 </style>
